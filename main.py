@@ -1,6 +1,8 @@
 import sys
 from random import randint
 
+import subprocess
+
 from browser_window import BrowserWindow
 
 from PyQt6.QtGui import QAction
@@ -37,19 +39,25 @@ class MainWindow(QMainWindow):
         input_widget_layout = QHBoxLayout()
         input_widget.setLayout(input_widget_layout)
 
-        code_input = QTextEdit()
-        input_widget_layout.addWidget(code_input)
+        self.code_input = QTextEdit()
+        input_widget_layout.addWidget(self.code_input)
 
-        code_output = QTextEdit()
-        input_widget_layout.addWidget(code_output)
-        code_output.setReadOnly(True)
+        self.code_output = QTextEdit()
+        self.code_output.setReadOnly(True)
+        input_widget_layout.addWidget(self.code_output)
 
         run_button = QPushButton('Run')
+        run_button.clicked.connect(self.compile_code)
         layout.addWidget(run_button)
 
         w = QWidget()
         w.setLayout(layout)
         self.setCentralWidget(w)
+
+    def compile_code(self):
+        code = self.code_input.toPlainText()
+
+        self.code_output.setText(subprocess.getoutput('python -c "' + code + '"'))
 
     def open_browser(self):
         self.browser_window.show()
