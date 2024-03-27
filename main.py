@@ -2,6 +2,7 @@ import sys
 from random import randint
 
 import subprocess
+import os
 
 from browser_window import BrowserWindow
 
@@ -57,7 +58,12 @@ class MainWindow(QMainWindow):
     def compile_code(self):
         code = self.code_input.toPlainText()
 
-        self.code_output.setText(subprocess.getoutput('python -c "' + code + '"'))
+        with open("code.py", "w") as file:
+            file.write(code)
+
+        self.code_output.setText(subprocess.getoutput('python code.py'))
+
+        os.remove("code.py")
 
     def open_browser(self):
         self.browser_window.show()
