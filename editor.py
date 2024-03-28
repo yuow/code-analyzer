@@ -1,15 +1,14 @@
-from PyQt6.QtGui import QFont, QFontMetricsF
+from PyQt6.QtGui import QFont, QFontMetricsF, QSyntaxHighlighter
 import subprocess
 import os
 from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QWidget,
-    QPlainTextEdit
+    QPlainTextEdit,
 )
-
-
 from qfluentwidgets import PushButton
+from PyQt6 import Qsci
 
 class EditorWidget(QWidget):
     def __init__(self):
@@ -38,17 +37,21 @@ class EditorWidget(QWidget):
         self.layout.addWidget(run_button)
         self.setLayout(self.layout)
 
-class CodeEditor(QPlainTextEdit):
+class CodeEditor(Qsci.QsciScintilla):
     def __init__(self):
         super().__init__()
 
-        self.setFont(QFont("Monospace", 12))
-        self.setTabStopDistance(QFontMetricsF(self.font()).horizontalAdvance(' ') * 4)
+        self.lexer = Qsci.QsciLexerPython()
+        self.setLexer(self.lexer)
 
+        self.lexer.setFont(QFont("Consolas", 12))
+        self.setAutoIndent(True)
+        self.setIndentationWidth(4)
+        self.setTabWidth(4)
+        self.setIndentationGuides(True)
 
     def compile(self):
-        code = self.toPlainText()
-
+        code = self.text()
         with open("code.py", "w") as file:
             file.write(code)
         
