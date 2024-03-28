@@ -1,14 +1,11 @@
 import sys
 
-from browser_window import BrowserWindow
-from editor import EditorWidget
-
-from PyQt6.QtWidgets import (
-    QApplication,
-)
-
+from PyQt6.QtWidgets import QApplication
 from qfluentwidgets import FluentWindow
 from qfluentwidgets import FluentIcon as FIF
+
+from browser_window import BrowserWindow
+from editor import EditorWidget
 
 
 class MainWindow(FluentWindow):
@@ -34,4 +31,3 @@ if __name__ == "__main__":
     w = MainWindow()
     w.show()
     app.exec()
-

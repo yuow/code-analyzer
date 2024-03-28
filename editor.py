@@ -1,13 +1,8 @@
-from PyQt6.QtGui import QFont, QFontMetricsF
-import subprocess
 import os
-from PyQt6.QtWidgets import (
-    QVBoxLayout,
-    QHBoxLayout,
-    QWidget,
-    QPlainTextEdit
-)
+import subprocess
 
+from PyQt6.QtGui import QFont, QFontMetricsF
+from PyQt6.QtWidgets import QHBoxLayout, QPlainTextEdit, QVBoxLayout, QWidget
 from qfluentwidgets import PushButton
 
 
