@@ -1,5 +1,6 @@
 from PyQt6.QtGui import QFont, QFontMetricsF
 import subprocess
+import os
 from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
@@ -51,7 +52,15 @@ class CodeEditor(QPlainTextEdit):
 
 
     def compile(self):
-        code = self.toPlainText().replace('"', '\"')
-        return subprocess.getoutput('python -c "' + code + '"')
+        code = self.toPlainText()
+
+        with open("code.py", "w") as file:
+            file.write(code)
+        
+        output = subprocess.getoutput('python code.py')
+
+        os.remove("code.py")
+
+        return output
 
 
