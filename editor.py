@@ -1,4 +1,4 @@
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QFontMetricsF
 import subprocess
 from PyQt6.QtWidgets import (
     QVBoxLayout,
@@ -47,6 +47,8 @@ class CodeEditor(QPlainTextEdit):
         super().__init__()
 
         self.setFont(QFont("Monospace", 12))
+        self.setTabStopDistance(QFontMetricsF(self.font()).horizontalAdvance(' ') * 4)
+
 
     def compile(self):
         code = self.toPlainText().replace('"', '\"')
