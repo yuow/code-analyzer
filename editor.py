@@ -17,11 +17,6 @@ class EditorWidget(QWidget):
         self.setObjectName("Editor")
         self.setup_layout()
 
-
-    def compile_code(self):
-        code = self.code_input.toPlainText().replace('"', '\"')
-        self.code_output.setText(subprocess.getoutput('python -c "' + code + '"'))
-
     def setup_layout(self):
         self.layout = QVBoxLayout()
         input_widget = QWidget()
