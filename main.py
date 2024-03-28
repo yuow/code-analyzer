@@ -28,7 +28,7 @@ class MainWindow(FluentWindow):
 
     def initWindow(self):
         self.resize(900, 700)
-        self.setWindowTitle('PyQt-Fluent-Widgets')
+        self.setWindowTitle('Code Analyzer')
 
 
 if __name__ == "__main__":
