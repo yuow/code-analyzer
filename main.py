@@ -1,10 +1,7 @@
 import sys
-from random import randint
 
 from browser_window import BrowserWindow
 from editor import EditorWidget
-
-from PyQt6.QtGui import QAction
 
 from PyQt6.QtWidgets import (
     QApplication,
@@ -12,6 +9,7 @@ from PyQt6.QtWidgets import (
 
 from qfluentwidgets import FluentWindow
 from qfluentwidgets import FluentIcon as FIF
+
 
 class MainWindow(FluentWindow):
     def __init__(self):
@@ -36,3 +34,4 @@ if __name__ == "__main__":
     w = MainWindow()
     w.show()
     app.exec()
+
