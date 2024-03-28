@@ -1,9 +1,7 @@
-from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-)
 from PyQt6.QtCore import QUrl
 from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtWidgets import QVBoxLayout, QWidget
+
 
 class BrowserWindow(QWidget):
     def __init__(self):

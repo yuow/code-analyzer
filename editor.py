@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
 from qfluentwidgets import PushButton
 from PyQt6 import Qsci
 
+
 class EditorWidget(QWidget):
     def __init__(self):
         super().__init__()
@@ -32,7 +33,8 @@ class EditorWidget(QWidget):
         input_widget_layout.addWidget(self.code_output)
 
         run_button = PushButton('Run')
-        run_button.clicked.connect(lambda: self.code_output.setPlainText(self.code_input.compile()))
+        run_button.clicked.connect(
+            lambda: self.code_output.setPlainText(self.code_input.compile()))
 
         self.layout.addWidget(run_button)
         self.setLayout(self.layout)
@@ -54,11 +56,13 @@ class CodeEditor(Qsci.QsciScintilla):
         code = self.text()
         with open("code.py", "w") as file:
             file.write(code)
-        
+
         output = subprocess.getoutput('python code.py')
 
         os.remove("code.py")
 
         return output
 
-
+    def keyPressEvent(self, event):
+        print(event.key(), event.text())
+        super(CodeEditor, self).keyPressEvent(event)
