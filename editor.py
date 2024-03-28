@@ -58,4 +58,8 @@ class CodeEditor(QPlainTextEdit):
 
         return output
 
+    def keyPressEvent(self, event):
+        print(event.key(), event.text())
+        super(CodeEditor, self).keyPressEvent(event)
+
 
