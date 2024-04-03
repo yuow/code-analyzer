@@ -1,14 +1,16 @@
 from PyQt6.QtGui import QFont, QFontMetricsF, QSyntaxHighlighter
+from PyQt6.QtCore import Qt
 import subprocess
 import os
 from PyQt6.QtWidgets import (
-    QVBoxLayout,
     QHBoxLayout,
     QWidget,
     QPlainTextEdit,
+    QSplitter
 )
 from qfluentwidgets import PushButton
 from PyQt6 import Qsci
+from browser_window import BrowserWindow
 
 
 class EditorWidget(QWidget):
@@ -18,26 +20,33 @@ class EditorWidget(QWidget):
         self.setup_layout()
 
     def setup_layout(self):
-        self.layout = QVBoxLayout()
-        input_widget = QWidget()
-        self.layout.addWidget(input_widget)
+        layout = QHBoxLayout()
+        self.window_layout = QSplitter()
 
-        input_widget_layout = QHBoxLayout()
-        input_widget.setLayout(input_widget_layout)
+        self.window_layout.addWidget(self.create_editor_view())
+        self.window_layout.addWidget(BrowserWindow())
+
+        layout.addWidget(self.window_layout)
+        self.setLayout(layout)
+    
+    def create_editor_view(self):
+        editor_layout = QSplitter(Qt.Orientation.Vertical)
 
         self.code_input = CodeEditor()
-        input_widget_layout.addWidget(self.code_input)
+        editor_layout.addWidget(self.code_input)
 
         self.code_output = QPlainTextEdit()
         self.code_output.setReadOnly(True)
-        input_widget_layout.addWidget(self.code_output)
+        editor_layout.addWidget(self.code_output)
 
         run_button = PushButton('Run')
         run_button.clicked.connect(
             lambda: self.code_output.setPlainText(self.code_input.compile()))
 
-        self.layout.addWidget(run_button)
-        self.setLayout(self.layout)
+        editor_layout.addWidget(run_button)
+
+        return editor_layout
+
 
 class CodeEditor(Qsci.QsciScintilla):
     def __init__(self):
@@ -47,10 +56,14 @@ class CodeEditor(Qsci.QsciScintilla):
         self.setLexer(self.lexer)
 
         self.lexer.setFont(QFont("Consolas", 12))
+
         self.setAutoIndent(True)
         self.setIndentationWidth(4)
         self.setTabWidth(4)
         self.setIndentationGuides(True)
+
+        self.setMarginLineNumbers(1, True)
+        self.setMarginWidth(1, 30)
 
     def compile(self):
         code = self.text()
@@ -64,5 +77,5 @@ class CodeEditor(Qsci.QsciScintilla):
         return output
 
     def keyPressEvent(self, event):
+        super().keyPressEvent(event)
         print(event.key(), event.text())
-        super(CodeEditor, self).keyPressEvent(event)

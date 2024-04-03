@@ -8,7 +8,7 @@ class BrowserWindow(QWidget):
         super().__init__()
 
         webview = QWebEngineView()
-        webview.load(QUrl("https://python.org"))
+        webview.load(QUrl("https://google.com"))
 
         layout = QVBoxLayout()
         layout.addWidget(webview)

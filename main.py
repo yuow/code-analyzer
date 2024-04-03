@@ -1,6 +1,6 @@
 import sys
 
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QMainWindow
 from qfluentwidgets import FluentWindow
 from qfluentwidgets import FluentIcon as FIF
 
@@ -8,21 +8,15 @@ from browser_window import BrowserWindow
 from editor import EditorWidget
 
 
-class MainWindow(FluentWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.homeInterface = BrowserWindow()
-        self.editorInterface = EditorWidget()
 
-        self.initNavigation()
+        self.setCentralWidget(EditorWidget())
         self.initWindow()
 
-    def initNavigation(self):
-        self.addSubInterface(self.homeInterface, FIF.HOME, 'Home')
-        self.addSubInterface(self.editorInterface, FIF.EDIT, 'Editor')
-
     def initWindow(self):
-        self.resize(900, 700)
+        self.showMaximized()
         self.setWindowTitle('Code Analyzer')
 
 
