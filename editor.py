@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
     QPlainTextEdit,
     QSplitter
 )
-from qfluentwidgets import PushButton
+from qfluentwidgets import PrimaryPushButton
 from PyQt6 import Qsci
 from browser_window import BrowserWindow
 
@@ -35,15 +35,16 @@ class EditorWidget(QWidget):
         self.code_input = CodeEditor()
         editor_layout.addWidget(self.code_input)
 
+        run_button = PrimaryPushButton('Run')
+        run_button.clicked.connect(
+            lambda: self.code_output.setPlainText(self.code_input.compile()))
+        run_button.setBaseSize(100,100)
+
+        editor_layout.addWidget(run_button)
+
         self.code_output = QPlainTextEdit()
         self.code_output.setReadOnly(True)
         editor_layout.addWidget(self.code_output)
-
-        run_button = PushButton('Run')
-        run_button.clicked.connect(
-            lambda: self.code_output.setPlainText(self.code_input.compile()))
-
-        editor_layout.addWidget(run_button)
 
         return editor_layout
 
