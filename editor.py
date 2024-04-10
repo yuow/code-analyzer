@@ -38,7 +38,8 @@ class EditorWidget(QWidget):
         run_button = PrimaryPushButton('Run')
         run_button.clicked.connect(
             lambda: self.code_output.setPlainText(self.code_input.compile()))
-        run_button.setBaseSize(100,100)
+        run_button.setShortcut("Ctrl+Return")
+        run_button.setToolTip("Ctrl + Enter")
 
         editor_layout.addWidget(run_button)
 
