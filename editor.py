@@ -1,4 +1,4 @@
-from PyQt6.QtGui import QFont, QFontMetricsF, QSyntaxHighlighter
+from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 import subprocess
 import os
@@ -28,7 +28,7 @@ class EditorWidget(QWidget):
 
         layout.addWidget(self.window_layout)
         self.setLayout(layout)
-    
+
     def create_editor_view(self):
         editor_layout = QSplitter(Qt.Orientation.Vertical)
 
@@ -52,10 +52,9 @@ class CodeEditor(Qsci.QsciScintilla):
     def __init__(self):
         super().__init__()
 
-        self.lexer = Qsci.QsciLexerPython()
-        self.setLexer(self.lexer)
-
-        self.lexer.setFont(QFont("Consolas", 12))
+        lexer = Qsci.QsciLexerPython(self)
+        lexer.setFont(QFont("Consolas", 12))
+        self.setLexer(lexer)
 
         self.setAutoIndent(True)
         self.setIndentationWidth(4)
@@ -76,6 +75,6 @@ class CodeEditor(Qsci.QsciScintilla):
 
         return output
 
-    def keyPressEvent(self, event):
-        super().keyPressEvent(event)
-        print(event.key(), event.text())
+    def keyPressEvent(self, e):
+        super().keyPressEvent(e)
+        print(e.key(), e.text())
