@@ -1,10 +1,7 @@
 import sys
 
 from PyQt6.QtWidgets import QApplication, QMainWindow
-from qfluentwidgets import FluentWindow
-from qfluentwidgets import FluentIcon as FIF
 
-from browser_window import BrowserWindow
 from editor import EditorWidget
 
 
