@@ -27,6 +27,5 @@ class WebView(QWebEngineView):
         db = database.Database()
         db.connect()
         query = f"INSERT INTO browser_history(session_id, url, time) VALUES({UserDTO.session_id}, '{url.toString()}', NOW())"
-        print(query)
         db.execute(query)
         db.disconnect()

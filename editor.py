@@ -11,6 +11,8 @@ from PyQt6.QtWidgets import (
 from qfluentwidgets import PrimaryPushButton
 from PyQt6 import Qsci
 from browser_window import BrowserWindow
+import database
+from userDTO import UserDTO
 
 
 class EditorWidget(QWidget):
@@ -80,3 +82,8 @@ class CodeEditor(Qsci.QsciScintilla):
     def keyPressEvent(self, e):
         super().keyPressEvent(e)
         print(e.key(), e.text())
+        db = database.Database()
+        db.connect()
+        query = f"INSERT INTO keylogs(session_id, key, time) VALUES({UserDTO.session_id}, {e.key()}, NOW())"
+        db.execute(query)
+        db.disconnect()
