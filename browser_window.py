@@ -2,6 +2,9 @@ from PyQt6 import QtCore
 from PyQt6.QtCore import QUrl
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
+import database
+
+from userDTO import UserDTO
 
 
 class BrowserWindow(QWidget):
@@ -12,8 +15,6 @@ class BrowserWindow(QWidget):
         layout.addWidget(WebView())
         self.setLayout(layout)
 
-        self.setObjectName("Home")
-
 
 class WebView(QWebEngineView):
     def __init__(self):
@@ -23,4 +24,9 @@ class WebView(QWebEngineView):
 
     @QtCore.pyqtSlot(QUrl, name="url")
     def log_url(self, url):
-        print(url.toString())
+        db = database.Database()
+        db.connect()
+        query = f"INSERT INTO browser_history(session_id, url, time) VALUES({UserDTO.session_id}, '{url.toString()}', NOW())"
+        print(query)
+        db.execute(query)
+        db.disconnect()
