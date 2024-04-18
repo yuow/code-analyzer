@@ -22,6 +22,7 @@ class Database:
     def connect(self, config=db_params):
         try:
             self._connection = psycopg2.connect(**config)
+            self._connection.autocommit = True
         except Exception as e:
             print(f'error occured while connecting to database: {e}')
 
@@ -32,10 +33,12 @@ class Database:
 
         cursor = self._connection.cursor()
         cursor.execute(query, params)
-        result = cursor.fetchall()
-        cursor.close()
-
-        return result
+        try:
+            return cursor.fetchall()
+        except:
+            return
+        finally:
+            cursor.close()
 
     def disconnect(self):
         if self._connection:
