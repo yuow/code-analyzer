@@ -80,3 +80,7 @@ class CodeEditor(Qsci.QsciScintilla):
     def keyPressEvent(self, e):
         super().keyPressEvent(e)
         print(e.key(), e.text())
+
+    def keyReleaseEvent(self, e):
+        super().keyReleaseEvent(e)
+        print(e.key(), e.text())
