@@ -5,12 +5,12 @@ from PyQt6.QtWidgets import QApplication, QMainWindow
 from editor import EditorWidget
 
 import database
+from userDTO import UserDTO
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.session_id = None
 
         self.setCentralWidget(EditorWidget())
         self.initWindow()
@@ -24,8 +24,9 @@ class MainWindow(QMainWindow):
     def create_session(self):
         db = database.Database()
         db.connect()
-        self.session_id = db.execute(
+        result = db.execute(
             "INSERT INTO Sessions(start_time) VALUES(NOW()) RETURNING session_id")
+        UserDTO.session_id = result[0][0]
 
 
 if __name__ == "__main__":
