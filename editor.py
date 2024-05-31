@@ -72,8 +72,7 @@ class CodeEditor(Qsci.QsciScintilla):
 
         self.total_time = 0
 
-        self.focus_in_timestamp = 0
-
+        self.focus_in_timestamp = datetime.datetime.now()
         self.keys_pressed = 0
 
         self.typing_speed = 0
@@ -119,12 +118,9 @@ class CodeEditor(Qsci.QsciScintilla):
     def _on_destroyed(d):
         print("-----------------")
         print("DATA: ")
-        print(d['typing_speed'])
-        print(d['total_time'])
-        delta = datetime.datetime.now() - d['focus_in_timestamp']
-        total_time = d['total_time'] + delta.total_seconds()
-        print(f"typing speed: {total_time / d['keys_pressed']}")
-        # print(d['total_time'])
+        print(f"total time: {d['total_time']}")
+        print(f"key presses: {d['keys_pressed']}")
+        print(f"typing speed: {d['keys_pressed'] / d['total_time']} / sec")
 
         
 
