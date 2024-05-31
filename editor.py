@@ -115,11 +115,16 @@ class CodeEditor(Qsci.QsciScintilla):
         db.execute(query)
         db.disconnect()
 
+    @staticmethod
     def _on_destroyed(d):
         print("-----------------")
         print("DATA: ")
         print(d['typing_speed'])
         print(d['total_time'])
+        delta = datetime.datetime.now() - d['focus_in_timestamp']
+        total_time = d['total_time'] + delta.total_seconds()
+        print(f"typing speed: {total_time / d['keys_pressed']}")
+        # print(d['total_time'])
 
         
 
