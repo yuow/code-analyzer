@@ -13,6 +13,7 @@ from PyQt6 import Qsci
 from browser_window import BrowserWindow
 import database
 from userDTO import UserDTO
+import datetime
 
 
 class EditorWidget(QWidget):
@@ -68,6 +69,12 @@ class CodeEditor(Qsci.QsciScintilla):
         self.setMarginLineNumbers(1, True)
         self.setMarginWidth(1, 30)
 
+        self.total_time = 0
+
+        self.focus_in_timestamp = 0
+
+        self.keys_pressed = 0
+
     def compile(self):
         code = self.text()
         with open("code.py", "w") as file:
@@ -79,9 +86,23 @@ class CodeEditor(Qsci.QsciScintilla):
 
         return output
 
+    def focusInEvent(self, e):
+        self.focus_in_timestamp = datetime.datetime.now()
+        print("got focus")
+
+    def focusOutEvent(self, e):
+        delta_time = datetime.datetime.now() - self.focus_in_timestamp
+        self.total_time += delta_time.total_seconds()
+        print(f"{self.total_time=}")
+        print("lost focus")
+
     def keyPressEvent(self, e):
         super().keyPressEvent(e)
         print(e.key(), e.text())
+        self.keys_pressed += 1
+        print(f"{self.keys_pressed=}")
+        if self.total_time != 0:
+            print(f"typing speed: {self.keys_pressed/self.total_time} symbols per second")
         db = database.Database()
         db.connect()
         query = f"INSERT INTO keylogs(session_id, key, time) VALUES({UserDTO.session_id}, {e.key()}, NOW())"
