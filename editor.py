@@ -1,3 +1,4 @@
+from functools import partial
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 import subprocess
@@ -75,6 +76,10 @@ class CodeEditor(Qsci.QsciScintilla):
 
         self.keys_pressed = 0
 
+        self.typing_speed = 0
+
+        self.destroyed.connect(partial(CodeEditor._on_destroyed, self.__dict__))
+
     def compile(self):
         code = self.text()
         with open("code.py", "w") as file:
@@ -103,8 +108,18 @@ class CodeEditor(Qsci.QsciScintilla):
         print(f"{self.keys_pressed=}")
         if self.total_time != 0:
             print(f"typing speed: {self.keys_pressed/self.total_time} symbols per second")
+            self.typing_speed = self.keys_pressed / self.total_time
         db = database.Database()
         db.connect()
         query = f"INSERT INTO keylogs(session_id, key, time) VALUES({UserDTO.session_id}, {e.key()}, NOW())"
         db.execute(query)
         db.disconnect()
+
+    def _on_destroyed(d):
+        print("-----------------")
+        print("DATA: ")
+        print(d['typing_speed'])
+        print(d['total_time'])
+
+        
+

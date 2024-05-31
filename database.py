@@ -3,8 +3,8 @@ import psycopg2
 db_params = {
     "host": "localhost",
     "database": "keylogger",
-    "user": "jaennil",
-    "password": "naen",
+    "user": "postgres",
+    "password": "1234",
     "port": "5432"
 }
 
