@@ -55,6 +55,7 @@ class EditorWidget(QWidget):
 
 
 class CodeEditor(Qsci.QsciScintilla):
+    stack = []
     def __init__(self):
         super().__init__()
 
@@ -80,6 +81,12 @@ class CodeEditor(Qsci.QsciScintilla):
         self.destroyed.connect(partial(CodeEditor._on_destroyed, self.__dict__))
 
     def compile(self):
+        db = database.Database()
+        db.connect()
+        query = f"INSERT INTO keylogs(session_id, key, keytext, time, release_time) VALUES({UserDTO.session_id}, 0, 'RUN', NOW(), NOW())"
+        db.execute(query)
+        db.disconnect()
+
         code = self.text()
         with open("code.py", "w") as file:
             file.write(code)
@@ -100,8 +107,21 @@ class CodeEditor(Qsci.QsciScintilla):
         print(f"{self.total_time=}")
         print("lost focus")
 
+
     def keyPressEvent(self, e):
         super().keyPressEvent(e)
+
+        print(e.key(), e.text())
+        print(f"{self.keys_pressed=}")
+        db = database.Database()
+        db.connect()
+        query = f"INSERT INTO keylogs(session_id, key, keytext, time, release_time) VALUES({UserDTO.session_id}, {e.key()}, '{e.text()}', NOW(), NULL)"
+        db.execute(query)
+        db.disconnect()
+
+    def keyReleaseEvent(self, e):
+        super().keyReleaseEvent(e)
+
         print(e.key(), e.text())
         self.keys_pressed += 1
         print(f"{self.keys_pressed=}")
@@ -110,7 +130,7 @@ class CodeEditor(Qsci.QsciScintilla):
             self.typing_speed = self.keys_pressed / self.total_time
         db = database.Database()
         db.connect()
-        query = f"INSERT INTO keylogs(session_id, key, time) VALUES({UserDTO.session_id}, {e.key()}, NOW())"
+        query = f"INSERT INTO keylogs(session_id, key, keytext, time, release_time) VALUES({UserDTO.session_id}, {e.key()}, '{e.text()}', NULL, NOW())"
         db.execute(query)
         db.disconnect()
 
@@ -121,6 +141,4 @@ class CodeEditor(Qsci.QsciScintilla):
         print(f"total time: {d['total_time']}")
         print(f"key presses: {d['keys_pressed']}")
         print(f"typing speed: {d['keys_pressed'] / d['total_time']} / sec")
-
-        
 
