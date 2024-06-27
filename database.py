@@ -1,12 +1,6 @@
 import psycopg2
-
-db_params = {
-    "host": "localhost",
-    "database": "keylogger",
-    "user": "postgres",
-    "password": "1234",
-    "port": "5432"
-}
+import dotenv
+import os
 
 
 class Database:
@@ -19,9 +13,16 @@ class Database:
             cls._instance._connection = None
         return cls._instance
 
-    def connect(self, config=db_params):
+    def connect(self):
+        dotenv.load_dotenv()
+        dbname = os.environ.get("DBNAME")
+        host = os.environ.get("HOST")
+        user = os.environ.get("USER")
+        password = os.environ.get("PASSWORD")
+        port = os.environ.get("PORT")
         try:
-            self._connection = psycopg2.connect(**config)
+            self._connection = psycopg2.connect(
+                dbname=dbname, host=host, user=user, password=password, port=port)
             self._connection.autocommit = True
         except Exception as e:
             print(f'error occured while connecting to database: {e}')

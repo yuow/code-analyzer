@@ -104,7 +104,6 @@ class CodeEditor(Qsci.QsciScintilla):
     def focusOutEvent(self, e):
         delta_time = datetime.datetime.now() - self.focus_in_timestamp
         self.total_time += delta_time.total_seconds()
-        print(f"{self.total_time=}")
         print("lost focus")
 
 
@@ -112,33 +111,29 @@ class CodeEditor(Qsci.QsciScintilla):
         super().keyPressEvent(e)
 
         print(e.key(), e.text())
-        print(f"{self.keys_pressed=}")
         db = database.Database()
         db.connect()
         query = f"INSERT INTO keylogs(session_id, key, keytext, time, release_time) VALUES({UserDTO.session_id}, {e.key()}, '{e.text()}', NOW(), NULL)"
         db.execute(query)
         db.disconnect()
 
-    def keyReleaseEvent(self, e):
-        super().keyReleaseEvent(e)
+    def keyReleaseEvent(self, a0):
+        super().keyReleaseEvent(a0)
 
-        print(e.key(), e.text())
+        print(a0.key(), a0.text())
         self.keys_pressed += 1
-        print(f"{self.keys_pressed=}")
         if self.total_time != 0:
-            print(f"typing speed: {self.keys_pressed/self.total_time} symbols per second")
             self.typing_speed = self.keys_pressed / self.total_time
         db = database.Database()
         db.connect()
-        query = f"INSERT INTO keylogs(session_id, key, keytext, time, release_time) VALUES({UserDTO.session_id}, {e.key()}, '{e.text()}', NULL, NOW())"
+        query = f"INSERT INTO keylogs(session_id, key, keytext, time, release_time) VALUES({UserDTO.session_id}, {a0.key()}, '{a0.text()}', NULL, NOW())"
         db.execute(query)
         db.disconnect()
 
     @staticmethod
     def _on_destroyed(d):
         print("-----------------")
-        print("DATA: ")
         print(f"total time: {d['total_time']}")
-        print(f"key presses: {d['keys_pressed']}")
-        print(f"typing speed: {d['keys_pressed'] / d['total_time']} / sec")
+        print(f"keys presses: {d['keys_pressed']}")
+        print(f"typing speed: {d['keys_pressed'] / d['total_time']} symbols / sec")
 
